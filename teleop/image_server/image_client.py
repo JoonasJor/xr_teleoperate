@@ -161,8 +161,8 @@ class ImageClient:
                 if self.tv_enable_shm:
                     np.copyto(self.tv_img_array, np.array(current_image[:, :self.tv_img_shape[1]]))
                 
-                if self.wrist_enable_shm:
-                    np.copyto(self.wrist_img_array, np.array(current_image[:, -self.wrist_img_shape[1]:]))
+                #if self.wrist_enable_shm:
+                #    np.copyto(self.wrist_img_array, np.array(current_image[:, -self.wrist_img_shape[1]:]))
                 
                 if self._image_show:
                     height, width = current_image.shape[:2]
@@ -184,14 +184,14 @@ class ImageClient:
 
 if __name__ == "__main__":
     # example1
-    # tv_img_shape = (480, 1280, 3)
-    # img_shm = shared_memory.SharedMemory(create=True, size=np.prod(tv_img_shape) * np.uint8().itemsize)
-    # img_array = np.ndarray(tv_img_shape, dtype=np.uint8, buffer=img_shm.buf)
-    # img_client = ImageClient(tv_img_shape = tv_img_shape, tv_img_shm_name = img_shm.name)
-    # img_client.receive_process()
+    tv_img_shape = (480, 848, 3)
+    img_shm = shared_memory.SharedMemory(create=True, size=np.prod(tv_img_shape) * np.uint8().itemsize)
+    img_array = np.ndarray(tv_img_shape, dtype=np.uint8, buffer=img_shm.buf)
+    img_client = ImageClient(tv_img_shape = (480, 848, 3), tv_img_shm_name = img_shm.name)
+    img_client.receive_process()
 
     # example2
     # Initialize the client with performance evaluation enabled
     # client = ImageClient(image_show = True, server_address='127.0.0.1', Unit_Test=True) # local test
-    client = ImageClient(image_show = True, server_address='192.168.123.164', Unit_Test=False) # deployment test
-    client.receive_process()
+    #client = ImageClient(tv_img_shape = (480, 848, 3), image_show = True, server_address='192.168.123.164', Unit_Test=False) # deployment test
+    #client.receive_process()

@@ -65,7 +65,7 @@ class G1_29_ArmController:
         self.tauff_target = np.zeros(14)
         self.motion_mode = motion_mode
         self.simulation_mode = simulation_mode
-        self.kp_high = 300.0
+        self.kp_high = 150.0
         self.kd_high = 3.0
         self.kp_low = 80.0
         self.kd_low = 3.0
@@ -82,9 +82,9 @@ class G1_29_ArmController:
 
         # initialize lowcmd publisher and lowstate subscriber
         if self.simulation_mode:
-            ChannelFactoryInitialize(1)
+            ChannelFactoryInitialize(1, "lo")
         else:
-            ChannelFactoryInitialize(0)
+            ChannelFactoryInitialize(0, "enx00e04c00091b")
 
         if self.motion_mode:
             self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Motion, hg_LowCmd)
@@ -164,7 +164,7 @@ class G1_29_ArmController:
 
     def _ctrl_motor_state(self):
         if self.motion_mode:
-            self.msg.motor_cmd[G1_29_JointIndex.kNotUsedJoint0].q = 1.0;
+            self.msg.motor_cmd[G1_29_JointIndex.kNotUsedJoint0].q = 1.0
 
         while True:
             start_time = time.time()

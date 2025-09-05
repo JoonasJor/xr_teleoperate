@@ -144,9 +144,9 @@ class ImageServer:
         self.head_image_shape = config.get('head_camera_image_shape', [480, 640])      # (height, width)
         self.head_camera_id_numbers = config.get('head_camera_id_numbers', [0])
 
-        self.wrist_camera_type = config.get('wrist_camera_type', None)
-        self.wrist_image_shape = config.get('wrist_camera_image_shape', [480, 640])    # (height, width)
-        self.wrist_camera_id_numbers = config.get('wrist_camera_id_numbers', None)
+        #self.wrist_camera_type = config.get('wrist_camera_type', None)
+        #self.wrist_image_shape = config.get('wrist_camera_image_shape', [480, 640])    # (height, width)
+        #self.wrist_camera_id_numbers = config.get('wrist_camera_id_numbers', None)
 
         self.port = port
         self.Unit_Test = Unit_Test

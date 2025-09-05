@@ -65,7 +65,8 @@ if __name__ == '__main__':
     parser.add_argument('--record', action = 'store_true', help = 'Enable data recording')
     parser.add_argument('--motion', action = 'store_true', help = 'Enable motion control mode')
     parser.add_argument('--headless', action='store_true', help='Enable headless mode (no display)')
-    parser.add_argument('--sim', action = 'store_true', help = 'Enable isaac simulation mode')
+    parser.add_argument('--sim', action = 'store_true', help = 'Enable simulation mode')
+    parser.add_argument('--disable-img-passthrough', action = 'store_true', help = 'Disable image display window in passthrough')
 
     args = parser.parse_args()
     logger_mp.info(f"args: {args}")
@@ -77,19 +78,19 @@ if __name__ == '__main__':
             'head_camera_type': 'opencv',
             'head_camera_image_shape': [480, 640],  # Head camera resolution
             'head_camera_id_numbers': [0],
-            'wrist_camera_type': 'opencv',
-            'wrist_camera_image_shape': [480, 640],  # Wrist camera resolution
-            'wrist_camera_id_numbers': [2, 4],
+            #'wrist_camera_type': 'opencv',
+            #'wrist_camera_image_shape': [480, 640],  # Wrist camera resolution
+            #'wrist_camera_id_numbers': [2, 4],
         }
     else:
         img_config = {
             'fps': 30,
             'head_camera_type': 'opencv',
-            'head_camera_image_shape': [480, 1280],  # Head camera resolution
+            'head_camera_image_shape': [480, 848],  # Head camera resolution
             'head_camera_id_numbers': [0],
-            'wrist_camera_type': 'opencv',
-            'wrist_camera_image_shape': [480, 640],  # Wrist camera resolution
-            'wrist_camera_id_numbers': [2, 4],
+            #'wrist_camera_type': 'opencv',
+            #'wrist_camera_image_shape': [480, 640],  # Wrist camera resolution
+            #'wrist_camera_id_numbers': [2, 4],
         }
 
 
@@ -132,7 +133,7 @@ if __name__ == '__main__':
 
     # television: obtain hand pose data from the XR device and transmit the robot's head camera image to the XR device.
     tv_wrapper = TeleVuerWrapper(binocular=BINOCULAR, use_hand_tracking=args.xr_mode == "hand", img_shape=tv_img_shape, img_shm_name=tv_img_shm.name, 
-                                 return_state_data=True, return_hand_rot_data = False)
+                                 return_state_data=True, return_hand_rot_data = False, disable_img_passthrough = args.disable_img_passthrough)
 
     # arm
     if args.arm == "G1_29":
@@ -236,6 +237,7 @@ if __name__ == '__main__':
                         publish_reset_category(1, reset_pose_publisher)
             # get input data
             tele_data = tv_wrapper.get_motion_state_data()
+            #print(tele_data)
             if (args.ee == "dex3" or args.ee == "inspire1" or args.ee == "brainco") and args.xr_mode == "hand":
                 with left_hand_pos_array.get_lock():
                     left_hand_pos_array[:] = tele_data.left_hand_pos.flatten()
