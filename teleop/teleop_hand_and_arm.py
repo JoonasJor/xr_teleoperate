@@ -42,10 +42,10 @@ def on_press(key):
     if key == 'r':
         start_signal = True
         logger_mp.info("Program start signal received.")
-    elif key == 'q':
+    elif key == 'q' and start_signal == True:
         stop_listening()
         running = False
-    elif key == 's':
+    elif key == 's' and start_signal == True:
         should_toggle_recording = True
     else:
         logger_mp.info(f"{key} was pressed, but no action is defined for this key.")
@@ -137,17 +137,17 @@ if __name__ == '__main__':
 
     # arm
     if args.arm == "G1_29":
-        arm_ctrl = G1_29_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
         arm_ik = G1_29_ArmIK()
+        arm_ctrl = G1_29_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
     elif args.arm == "G1_23":
-        arm_ctrl = G1_23_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
         arm_ik = G1_23_ArmIK()
+        arm_ctrl = G1_23_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
     elif args.arm == "H1_2":
-        arm_ctrl = H1_2_ArmController(simulation_mode=args.sim)
         arm_ik = H1_2_ArmIK()
+        arm_ctrl = H1_2_ArmController(simulation_mode=args.sim)
     elif args.arm == "H1":
-        arm_ctrl = H1_ArmController(simulation_mode=args.sim)
         arm_ik = H1_ArmIK()
+        arm_ctrl = H1_ArmController(simulation_mode=args.sim)
 
     # end-effector
     if args.ee == "dex3":
@@ -214,6 +214,7 @@ if __name__ == '__main__':
                 cv2.imshow("record image", tv_resized_image)
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
+                    stop_listening()
                     running = False
                     if args.sim:
                         publish_reset_category(2, reset_pose_publisher)
@@ -260,8 +261,8 @@ if __name__ == '__main__':
             if args.xr_mode == "controller" and args.motion:
                 # quit teleoperate
                 if tele_data.tele_state.right_aButton:
-                    running = False
                     stop_listening()
+                    running = False
                 # command robot to enter damping mode. soft emergency stop function
                 if tele_data.tele_state.left_thumbstick_state and tele_data.tele_state.right_thumbstick_state:
                     sport_client.Damp()
