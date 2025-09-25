@@ -59,7 +59,7 @@ class DataBuffer:
             self.data = data
 
 class G1_29_ArmController:
-    def __init__(self, motion_mode = False, simulation_mode = False):
+    def __init__(self, motion_mode = False, simulation_mode = False, network_interface = "eth0"):
         logger_mp.info("Initialize G1_29_ArmController...")
         self.q_target = np.zeros(14)
         self.tauff_target = np.zeros(14)
@@ -84,7 +84,7 @@ class G1_29_ArmController:
         if self.simulation_mode:
             ChannelFactoryInitialize(1, "lo")
         else:
-            ChannelFactoryInitialize(0, "enx00e04c00091b")
+            ChannelFactoryInitialize(0, network_interface)
 
         if self.motion_mode:
             self.lowcmd_publisher = ChannelPublisher(kTopicLowCommand_Motion, hg_LowCmd)

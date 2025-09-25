@@ -61,6 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--xr-mode', type=str, choices=['hand', 'controller'], default='hand', help='Select XR device tracking source')
     parser.add_argument('--arm', type=str, choices=['G1_29', 'G1_23', 'H1_2', 'H1'], default='G1_29', help='Select arm controller')
     parser.add_argument('--ee', type=str, choices=['dex1', 'dex3', 'inspire1', 'brainco'], help='Select end effector controller')
+    parser.add_argument('--network-interface', type=str, default='eth0', help='Network interface name for robot communication (e.g., eth0, enx00e04c00091b)')
     # mode flags
     parser.add_argument('--record', action = 'store_true', help = 'Enable data recording')
     parser.add_argument('--motion', action = 'store_true', help = 'Enable motion control mode')
@@ -142,7 +143,7 @@ if __name__ == '__main__':
     # arm
     if args.arm == "G1_29":
         arm_ik = G1_29_ArmIK()
-        arm_ctrl = G1_29_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
+        arm_ctrl = G1_29_ArmController(motion_mode=args.motion, simulation_mode=args.sim, network_interface=args.network_interface)
     elif args.arm == "G1_23":
         arm_ik = G1_23_ArmIK()
         arm_ctrl = G1_23_ArmController(motion_mode=args.motion, simulation_mode=args.sim)
