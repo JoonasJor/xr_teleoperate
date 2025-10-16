@@ -30,11 +30,6 @@ class Inspire_Controller:
         else:
             self.hand_retargeting = HandRetargeting(HandType.INSPIRE_HAND_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1, "lo")
-        else:
-            ChannelFactoryInitialize(0)
-
         # Initialize hand command publishers
         self.LeftHandCmd_publisher = ChannelPublisher(kTopicInspireCtrlLeft, inspire_dds.inspire_hand_ctrl)
         self.LeftHandCmd_publisher.Init()
