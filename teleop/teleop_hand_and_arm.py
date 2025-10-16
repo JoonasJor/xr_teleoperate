@@ -163,11 +163,14 @@ if __name__ == '__main__':
             if not args.disable_img_passthrough:
                 img_client = ImageClient(
                     tv_img_shape = tv_img_shape, tv_img_shm_name = tv_img_shm.name,
-                    wrist_img_shape = wrist_img_shape, wrist_img_shm_name = wrist_img_shm.name
+                    wrist_img_shape = wrist_img_shape, wrist_img_shm_name = wrist_img_shm.name, server_address="192.168.123.164"
                 )
         else:
             if not args.disable_img_passthrough:
-                img_client = ImageClient(tv_img_shape = tv_img_shape, tv_img_shm_name = tv_img_shm.name)
+                if args.sim:
+                    img_client = ImageClient(tv_img_shape = tv_img_shape, tv_img_shm_name = tv_img_shm.name, server_address="127.0.0.1")
+                else:
+                    img_client = ImageClient(tv_img_shape = tv_img_shape, tv_img_shm_name = tv_img_shm.name, server_address="192.168.123.164")
 
         if not args.disable_img_passthrough:
             image_receive_thread = threading.Thread(target = img_client.receive_process, daemon = True)
