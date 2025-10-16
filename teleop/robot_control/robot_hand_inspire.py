@@ -30,11 +30,6 @@ class Inspire_Controller:
         else:
             self.hand_retargeting = HandRetargeting(HandType.INSPIRE_HAND_Unit_Test)
 
-        if self.simulation_mode:
-            ChannelFactoryInitialize(1, "lo")
-        else:
-            ChannelFactoryInitialize(0)
-
         # Initialize hand command publishers
         self.LeftHandCmd_publisher = ChannelPublisher(kTopicInspireCtrlLeft, inspire_dds.inspire_hand_ctrl)
         self.LeftHandCmd_publisher.Init()
@@ -153,9 +148,12 @@ class Inspire_Controller:
                         return np.clip((max_val - val) / (max_val - min_val), 0.0, 1.0)
 
                     for idx in range(Inspire_Num_Motors):
-                        if idx <= 3:
+                        if idx <= 2:
                             left_q_target[idx]  = normalize(left_q_target[idx], 0.0, 1.7)
                             right_q_target[idx] = normalize(right_q_target[idx], 0.0, 1.7)
+                        if idx == 3:
+                            left_q_target[idx]  = normalize(left_q_target[idx], 0.0, 1.3)
+                            right_q_target[idx] = normalize(right_q_target[idx], 0.0, 1.3)
                         elif idx == 4:
                             left_q_target[idx]  = normalize(left_q_target[idx], 0.0, 0.5)
                             right_q_target[idx] = normalize(right_q_target[idx], 0.0, 0.5)
