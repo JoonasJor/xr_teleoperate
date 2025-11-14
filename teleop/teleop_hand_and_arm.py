@@ -334,7 +334,7 @@ if __name__ == '__main__':
                 # control, limit velocity to within 0.3
                 sport_client.Move(-tele_data.tele_state.left_thumbstick_value[1]  * 0.3,
                                   -tele_data.tele_state.left_thumbstick_value[0]  * 0.3,
-                                  -tele_data.tele_state.right_thumbstick_value[0] * 0.3)
+                                  -tele_data.tele_state.right_thumbstick_value[0] * 0.8)
 
             # get current robot state data.
             current_lr_arm_q  = arm_ctrl.get_current_dual_arm_q()
