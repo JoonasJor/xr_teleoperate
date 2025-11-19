@@ -121,7 +121,7 @@ if __name__ == '__main__':
             img_config = {
                 'fps': 30,
                 'head_camera_type': 'opencv',
-                'head_camera_image_shape': [480, 848],  # Head camera resolution
+                'head_camera_image_shape': [480, 640],  # Head camera resolution
                 'head_camera_id_numbers': [0],
                 #'wrist_camera_type': 'opencv',
                 #'wrist_camera_image_shape': [480, 640],  # Wrist camera resolution
@@ -331,10 +331,13 @@ if __name__ == '__main__':
                 # command robot to enter damping mode. soft emergency stop function
                 if tele_data.tele_state.left_thumbstick_state and tele_data.tele_state.right_thumbstick_state:
                     sport_client.Damp()
-                # control, limit velocity to within 0.3
-                sport_client.Move(-tele_data.tele_state.left_thumbstick_value[1]  * 0.3,
-                                  -tele_data.tele_state.left_thumbstick_value[0]  * 0.3,
-                                  -tele_data.tele_state.right_thumbstick_value[0] * 0.8)
+                # control, scale velocity and apply deadzone
+                vx = -tele_data.tele_state.left_thumbstick_value[1] * 0.45 if abs(tele_data.tele_state.left_thumbstick_value[1]) > 0.5 else 0.0
+                vy = -tele_data.tele_state.left_thumbstick_value[0] * 0.45 if abs(tele_data.tele_state.left_thumbstick_value[0]) > 0.5 else 0.0
+                vyaw = -tele_data.tele_state.right_thumbstick_value[0] * 0.65 if abs(tele_data.tele_state.right_thumbstick_value[0]) > 0.5 else 0.0
+                duration = 1.0 / args.frequency * 4
+                #print(f"{vx=}, {vy=}, {vyaw=}, {duration=}")
+                sport_client.Move(vx, vy, vyaw, duration)
 
             # get current robot state data.
             current_lr_arm_q  = arm_ctrl.get_current_dual_arm_q()
