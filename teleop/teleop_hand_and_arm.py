@@ -46,8 +46,11 @@ ITEM_ID = None
 def on_press(key):
     global STOP, START, RECORD_TOGGLE
     if key == 'r':
+        logger_mp.info("Received start signal. The program will start in 10 seconds.")
+        time.sleep(10.0)
         START = True
     elif key == 'q':
+        logger_mp.info("Received stop signal. The program will exit after current loop.")
         STOP = True
     elif key == 's' and START == True:
         RECORD_TOGGLE = True
