@@ -4,6 +4,7 @@ set -euo pipefail
 ENV_NAME="tv"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONDA_SH="/home/unitree/miniconda3/etc/profile.d/conda.sh"
+export OMP_NUM_THREADS=1
 
 DEFAULT_ARGS=(
 	--xr-mode=hand
@@ -27,5 +28,5 @@ conda activate "${ENV_NAME}"
 
 jetson_clocks
 
-cd "${SCRIPT_DIR}"
+cd "${SCRIPT_DIR}/teleop/"
 exec python teleop_hand_and_arm.py "${DEFAULT_ARGS[@]}" "$@"
